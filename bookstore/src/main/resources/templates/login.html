@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="layout :: head"></head>
+
+<body>
+	<nav th:replace="layout :: header"></nav>
+
+	<div class="container" id="main-content" tiles:fragment="content">
+		<div class="row d-flex justify-content-center">
+			<form style="min-width: 300px;" name="f" th:action="@{/login}"
+				method="post">
+				<h5 class="text-center">Login form</h5>
+				<fieldset>
+					<div class="form-group">
+						<input class="form-control" type="text" id="username"
+							name="username" placeholder="Username" />
+					</div>
+
+					<div class="form-group">
+						<input class="form-control" type="password" id="password"
+							name="password" placeholder="Password" /> <em
+							style="position: relative; top: 10px;" th:if="${param.error}">Invalid
+							username or password.</em>
+					</div>
+
+					<div class="form-group" style="margin-top: 30px;">
+						<button type="submit" class="btn btn-block btn-primary">
+							<i class="fa fa-key"></i> Login
+						</button>
+					</div>
+				</fieldset>
+				<input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" />
+			</form>
+		</div>
+	</div>
+
+</body>
+</html>

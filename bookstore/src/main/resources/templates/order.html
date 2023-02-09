@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="layout :: head"></head>
+
+<body>
+	<nav th:replace="layout :: header"></nav>
+
+	<div class="container" id="main-content">
+		<div class="row">
+			<div class="col-6 no-padding">
+				<a href="#" th:href="@{/orders}" class="btn btn-info float-right">
+					<i class="fa fa-list-ul"></i> Orders
+				</a>
+			</div>
+			<div class="col-6 no-padding">
+				<a href="#" th:href="@{/logout}" class="btn btn-danger float-right">
+					<i class="fa fa-key"></i> Log out
+				</a>
+			</div>
+		</div>
+		<div class="card text-center text-white bg-dark"
+			style="margin-top: 25px; margin-bottom: 25px;"
+			th:object="${customer}">
+			<div class="card-header" th:text="${customer?.id}"></div>
+			<div class="card-body">
+				<h5 class="card-title"
+					th:text="|${customer?.name}   ${customer?.surname}|"></h5>
+				<p class="card-text"
+					th:text="|${customer?.countryRegion}, ${customer?.streetAndHouseNumber}   ${customer?.postalCode}   ${customer?.city}|"></p>
+			</div>
+			<div class="card-footer"
+				th:text="|${customer?.phoneNumber}, ${customer?.email}|"></div>
+		</div>
+		<div class="row mt-4">
+			<div th:if="${successMessage}"
+				class="col-12 alert alert-success alert-dismissible fade show"
+				role="alert">
+				<span th:text="${successMessage}"></span>
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+			<th:block th:unless="${#lists.isEmpty(books)}">
+				<div class="table-responsive">
+					<h5>List of products</h5>
+					<table class="table table-striped table-dark text-nowrap">
+						<thead>
+							<tr>
+								<th>Book ID</th>
+								<th>Name</th>
+								<th>Price</th>
+								<th>Authors</th>
+								<th>ISBN</th>
+								<th>Publisher</th>
+								<th>Published on</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="book : ${books}">
+								<td th:text="${book.id}">
+								<td th:text="${book?.name}"></td>
+								<td th:text="${book?.price}"></td>
+								<td th:text="${book?.authors}"></td>
+								<td th:text="${book?.isbn}"></td>
+								<td th:text="${book?.publisher}"></td>
+								<td th:text="${book?.publishedOn}"></td>
+							</tr>
+						</tbody>
+					</table>
+					<h5>&nbsp;</h5>
+				</div>
+				<div style="margin-top: 50px;" th:if="${orderPage.totalPages > 0}"
+					class="pagination" th:each="pageNumber : ${pageNumbers}">
+					<nav aria-label="Page navigation example">
+						<ul class="pagination">
+							<li class="page-item font-weight-bold"><a
+								th:href="@{/orders(size=${orderPage.size}, page=${pageNumber})}"
+								th:text=${pageNumber} th:class="page-link"></a></li>
+						</ul>
+					</nav>
+				</div>
+			</th:block>
+			<div class="col-4 no-padding"></div>
+		</div>
+	</div>
+
+</body>
+</html>

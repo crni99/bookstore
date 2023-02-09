@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="layout :: head"></head>
+
+<body>
+	<nav th:replace="layout :: header"></nav>
+
+	<div class="container" id="main-content">
+		<div class="row">
+			<div class="col-6 no-padding">
+				<form class="form-inline" action="#" th:action="@{/search}"
+					method="get">
+					<input class="form-control mr-sm-2" type="search" name="term"
+						placeholder="Search by name ..." />
+					<button class="btn btn-primary" type="submit">
+						<i class="fa fa-search"></i> Search
+					</button>
+				</form>
+			</div>
+		</div>
+
+		<div class="row mt-4">
+			<div th:if="${successMessage}"
+				class="col-12 alert alert-success alert-dismissible fade show"
+				role="alert">
+				<span th:text="${successMessage}"></span>
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+			<th:block th:if="${#lists.isEmpty(bookPage.content)}">
+				<h5>There are no books in stock</h5>
+			</th:block>
+
+			<th:block th:unless="${#lists.isEmpty(bookPage.content)}">
+				<div class="card-deck"
+					style="display: flex; justify-content: space-around; margin-top: 20px;">
+					<div class="col-sm-6"
+						style="max-width: 32rem; display: inline-block; width: 32rem;"
+						th:each="book, iStat : ${bookPage.content}">
+						<div class="card text-white bg-dark"
+							style="width: 32rem; margin-bottom: 50px">
+							<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+							<div class="card-body">
+								<h5 class="card-title" th:text="${book.name}"></h5>
+								<p class="card-text" th:text="${book.authors}"></p>
+							</div>
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item text-white bg-dark"
+									th:text="${book.publisher}"></li>
+								<li class="list-group-item text-white bg-dark"
+									th:text="${book.publishedOn}"></li>
+								<li class="list-group-item text-white bg-dark"
+									th:text="${book.isbn}"></li>
+							</ul>
+							<div class="card-footer" style="display: inline">
+								<i class="font-weight-bold align-middle"
+									th:text="${book.price} + ' ' + '$'"></i>
+								<form class="form-inline" style="float: right" action="#"
+									th:action="@{/cart/add/{id}(id=${book.id})}" method="get">
+									<button class="btn btn-success" type="submit">
+										<i class="fa fa-plus-circle"></i> Add to cart
+									</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div th:if="${bookPage.totalPages > 0}" class="pagination"
+					th:each="pageNumber : ${pageNumbers}">
+					<nav aria-label="Page navigation example">
+						<ul class="pagination">
+							<li class="page-item font-weight-bold"><a
+								th:href="@{/(size=${bookPage.size}, page=${pageNumber})}"
+								th:text=${pageNumber} th:class="page-link"></a></li>
+						</ul>
+					</nav>
+				</div>
+			</th:block>
+		</div>
+	</div>
+
+</body>
+</html>

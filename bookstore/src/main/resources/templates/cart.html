@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="layout :: head"></head>
+
+<body>
+	<nav th:replace="layout :: header"></nav>
+
+	<div class="container" id="main-content">
+		<div class="row h-100">
+			<div class="col-4 no-padding">
+				<form class="form-inline" action="/checkout" method="get">
+					<button class="btn btn-primary" type="submit">
+						<i class="fa fa-cart-arrow-down fa-bigger"></i> CHECKOUT
+					</button>
+				</form>
+			</div>
+			<div class="col-4 no-padding"
+				style="display: flex; justify-content: center;"></div>
+			<div class="col-4 no-padding">
+				<form class="form-inline justify-content-end" action="#"
+					th:action="@{/cart/remove/all}" method="get">
+					<button class="btn btn-danger" type="submit">
+						<i class="fa fa-trash-o fa-bigger"></i> DELETE ALL
+					</button>
+				</form>
+			</div>
+		</div>
+		<div class="row mt-4">
+			<div th:if="${successMessage}"
+				class="col-12 alert alert-success alert-dismissible fade show"
+				role="alert">
+				<span th:text="${successMessage}"></span>
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+			<th:block th:if="${#lists.isEmpty(cart)}">
+				<h5>Your basket is currently empty.</h5>
+			</th:block>
+
+			<th:block th:unless="${#lists.isEmpty(cart)}">
+				<div class="card-deck"
+					style="display: flex; justify-content: space-around; margin-top: 20px;">
+					<div class="col-sm-6"
+						style="max-width: 32rem; display: inline-table; width: 32rem;"
+						th:each="book, iStat : ${cart}">
+						<div class="card text-white bg-dark"
+							style="width: 32rem; margin-bottom: 50px">
+							<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+							<div class="card-body">
+								<h5 class="card-title" th:text="${book.name}"></h5>
+								<p class="card-text" th:text="${book.authors}"></p>
+							</div>
+							<div class="card-footer" style="display: inline">
+								<i class="font-weight-bold align-middle"
+									th:text="${book.price} + ' ' + '$'"></i>
+								<form class="form-inline" style="float: right" action="#"
+									th:action="@{/cart/remove/{id}(id=${book.id})}" method="get">
+									<button class="btn btn-danger" type="submit">
+										<i class="fa fa-minus-circle"></i> Remove from cart
+									</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div th:if="${bookPage.totalPages > 0}" class="pagination"
+					th:each="pageNumber : ${pageNumbers}">
+					<nav aria-label="Page navigation example">
+						<ul class="pagination">
+							<li class="page-item font-weight-bold"><a
+								th:href="@{/(size=${bookPage.size}, page=${pageNumber})}"
+								th:text=${pageNumber} th:class="page-link"></a></li>
+						</ul>
+					</nav>
+				</div>
+			</th:block>
+		</div>
+	</div>
+
+	<footer th:replace="layout :: footer"></footer>
+</body>
+</html>

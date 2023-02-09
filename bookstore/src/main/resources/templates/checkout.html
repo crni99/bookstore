@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="layout :: head"></head>
+
+<body>
+	<nav th:replace="layout :: header"></nav>
+
+	<div class="container" id="main-content">
+
+		<div class="row">
+			<div class="col-3 no-padding mb-5">
+				<form class="form-inline" action="/cart" method="get">
+					<button class="btn btn-primary" type="submit">
+						<i class="fa fa-cart-shopping fa-bigger"></i> CART
+					</button>
+				</form>
+			</div>
+			<div class="col-3 no-padding"></div>
+			<div class="col-3 no-padding"></div>
+		</div>
+
+		<div class="row">
+			<div class="col">
+				<form action="#" th:action="@{/checkout/placeOrder}"
+					th:object="${customer}" method="post">
+					<h4 class="text-center">Billing Details</h4>
+
+					<input type="hidden" th:field="*{id}" />
+
+					<div class="row">
+						<div class="form-group col">
+							<input class="form-control" type="text" placeholder="Name"
+								th:field="*{name}" th:errorclass="field-error" /> <em
+								th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></em>
+						</div>
+
+						<div class="form-group col">
+							<input class="form-control" type="text" placeholder="Surname"
+								step="any" th:field="*{surname}" th:errorclass="field-error" />
+							<em th:if="${#fields.hasErrors('surname')}"
+								th:errors="*{surname}"></em>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<input class="form-control" type="text"
+							placeholder="Country/Region" th:field="*{countryRegion}"
+							th:errorclass="field-error" /> <em
+							th:if="${#fields.hasErrors('countryRegion')}"
+							th:errors="*{countryRegion}"></em>
+					</div>
+
+					<div class="form-group">
+						<input class="form-control" type="text"
+							placeholder="Street and house number"
+							th:field="*{streetAndHouseNumber}" th:errorclass="field-error" />
+						<em th:if="${#fields.hasErrors('streetAndHouseNumber')}"
+							th:errors="*{streetAndHouseNumber}"></em>
+					</div>
+
+					<div class="form-group">
+						<input class="form-control" type="text" placeholder="City"
+							th:field="*{city}" th:errorclass="field-error" /> <em
+							th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></em>
+					</div>
+
+					<div class="form-group">
+						<input class="form-control" type="text" placeholder="Postal code"
+							th:field="*{postalCode}" th:errorclass="field-error" /> <em
+							th:if="${#fields.hasErrors('postalCode')}"
+							th:errors="*{postalCode}"></em>
+					</div>
+
+					<div class="form-group">
+						<input class="form-control" type="text" placeholder="Phone number"
+							th:field="*{phoneNumber}" th:errorclass="field-error" /> <em
+							th:if="${#fields.hasErrors('phoneNumber')}"
+							th:errors="*{phoneNumber}"></em>
+					</div>
+					<div class="form-group">
+						<input class="form-control" type="text" placeholder="Email"
+							th:field="*{email}" th:errorclass="field-error" /> <em
+							th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></em>
+					</div>
+
+					<div class="form-group">
+						<button type="submit" class="btn btn-block btn-primary">
+							<i class="fa fa-regular fa-cart-circle-check"></i> Place order
+						</button>
+					</div>
+				</form>
+			</div>
+			<div class="col">
+				<h4 class="text-center">Your order</h4>
+				<div class="row">
+					<div class="col">
+						<h5>Products</h5>
+						<tr th:each="book: ${productsInCart}">
+							<div>
+								<td th:text="${book.name}" />
+							</div>
+						</tr>
+					</div>
+					<div class="col">
+						<h5>In total</h5>
+						<tr th:each="book: ${productsInCart}">
+							<div>
+								<td th:text="${book.price}" />
+							</div>
+						</tr>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 25px;">
+					<div class="col">
+						<h5>Delivery</h5>
+					</div>
+					<div class="col">
+						<h5 th:text="|${shippingCosts} $|"></h5>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 25px;">
+					<div class="col">
+						<h5>In total</h5>
+					</div>
+					<div class="col">
+						<h5 th:text="|${totalPrice} $|"></h5>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 25px;">
+					<div class="col">
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="payment"
+								id="radioOption1" value="card"> <label
+								class="form-check-label" for="card"> Payment by card </label>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="payment"
+								id="radioOption2" value="cash" checked> <label
+								class="form-check-label" for="cash"> Cash on delivery </label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

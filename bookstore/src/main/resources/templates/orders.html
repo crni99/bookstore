@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="layout :: head"></head>
+
+<body>
+	<nav th:replace="layout :: header"></nav>
+
+	<div class="container" id="main-content">
+		<div class="row">
+			<div class="col-4 no-padding">
+				<form class="form-inline" action="#" th:action="@{/orders/search}"
+					method="get">
+					<input class="form-control mr-sm-2" type="search" name="term"
+						placeholder="Search by date ..." />
+					<button class="btn btn-primary" type="submit">
+						<i class="fa fa-search"></i> Search
+					</button>
+				</form>
+			</div>
+			<div class="col-4 no-padding">
+				<a href="#" th:href="@{/book}" class="btn btn-info float-right">
+					<i class="fa fa-list-ul"></i> Admin
+				</a>
+			</div>
+			<div class="col-4 no-padding">
+				<a href="#" th:href="@{/logout}" class="btn btn-danger float-right">
+					<i class="fa fa-key"></i> Log out
+				</a>
+			</div>
+		</div>
+
+		<div class="row mt-4">
+			<div th:if="${successMessage}"
+				class="col-12 alert alert-success alert-dismissible fade show"
+				role="alert">
+				<span th:text="${successMessage}"></span>
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+			<th:block th:if="${#lists.isEmpty(orderPage.content)}">
+				<h5>There are no current orders.</h5>
+			</th:block>
+
+			<th:block th:unless="${#lists.isEmpty(orderPage.content)}">
+				<div class="table-responsive">
+					<h5>List of orders</h5>
+					<table class="table table-striped table-dark text-nowrap">
+						<thead>
+							<tr>
+								<th>Customer ID</th>
+								<th>Name</th>
+								<th>Surname</th>
+								<th>Country/Region</th>
+								<th>Street and house number</th>
+								<th>City</th>
+								<th>Postal code</th>
+								<th>Phone number</th>
+								<th>Email</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="customerBooks, iStat : ${orderPage.content}">
+								<td><a href="#"
+									th:href="@{/orders/{id}(id=${customerBooks?.Customer?.id})}"
+									th:text="${customerBooks?.Customer?.id}"></a></td>
+								<td th:text="${customerBooks?.Customer?.name}"></td>
+								<td th:text="${customerBooks?.Customer?.surname}"></td>
+								<td th:text="${customerBooks?.Customer?.countryRegion}"></td>
+								<td th:text="${customerBooks?.Customer?.streetAndHouseNumber}"></td>
+								<td th:text="${customerBooks?.Customer?.city}"></td>
+								<td th:text="${customerBooks?.Customer?.postalCode}"></td>
+								<td th:text="${customerBooks?.Customer?.phoneNumber}"></td>
+								<td th:text="${customerBooks?.Customer?.email}"></td>
+							</tr>
+						</tbody>
+					</table>
+					<h5>&nbsp;</h5>
+				</div>
+				<div style="margin-top: 50px;" th:if="${orderPage.totalPages > 0}"
+					class="pagination" th:each="pageNumber : ${pageNumbers}">
+					<nav aria-label="Page navigation example">
+						<ul class="pagination">
+							<li class="page-item font-weight-bold"><a
+								th:href="@{/orders(size=${orderPage.size}, page=${pageNumber})}"
+								th:text=${pageNumber} th:class="page-link"></a></li>
+						</ul>
+					</nav>
+				</div>
+			</th:block>
+			<div class="col-4 no-padding"></div>
+		</div>
+	</div>
+
+</body>
+</html>
